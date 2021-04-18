@@ -1,0 +1,38 @@
+.SignupSubmit {
+    align-self: center;
+}
+
+.input {
+    border: 1px solid #FAD00D;
+}
+
+.SignupForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.SignupForm>* {
+    margin: 30px;
+}
+
+.SignupContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.SignupContainer>* {
+    margin: 10px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header div {
+    font-size: 20px;
+}

@@ -1,0 +1,30 @@
+.AboutUsContainer {
+    margin: 7px;
+    background: white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.header {
+    font-size: 24px;
+}
+
+.AboutUsContainer>* {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.paragraph {
+    margin: 5px;
+    word-wrap: normal;
+}
+
+.photo {
+    margin: 5px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}

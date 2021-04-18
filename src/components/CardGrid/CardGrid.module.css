@@ -1,0 +1,10 @@
+.CardGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.CardGrid>* {
+    margin: 10px;
+}

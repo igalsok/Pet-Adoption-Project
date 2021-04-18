@@ -1,0 +1,23 @@
+.WelcomeHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    background: white;
+}
+
+.WelcomeHeader>* {
+    padding: 5px 20px;
+}
+
+.Menu {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    box-sizing: unset;
+}
+
+.Welcome {
+    font-weight: 600;
+}

@@ -1,0 +1,38 @@
+.loginSubmit {
+    align-self: center;
+}
+
+.input {
+    border: 1px solid #FAD00D;
+}
+
+.LoginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.LoginForm>* {
+    margin: 30px;
+}
+
+.LoginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginContainer>* {
+    margin: 10px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header div {
+    font-size: 20px;
+}

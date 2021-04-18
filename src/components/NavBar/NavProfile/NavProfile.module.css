@@ -1,0 +1,21 @@
+.ProfileContainer {
+    display: flex;
+}
+
+.ProfileContainer>* {
+    margin: 5px;
+}
+
+.ProfileImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.ProfileDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

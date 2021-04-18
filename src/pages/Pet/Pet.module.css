@@ -1,0 +1,74 @@
+body {
+    background: #F9F9F9
+}
+
+.PetContainer {
+    margin-top: 5px;
+}
+
+.Photo {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+
+.InfoContainer {
+    position: relative;
+    background: white;
+    margin: 15px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.InfoWrapper {
+    width: 100%;
+    margin: 10px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.SecondaryInfoWrapper {
+    width: 100%;
+    margin: 10px;
+    padding: 5px 15px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.SecondaryInfoWrapper>* {
+    flex: 1 0 40%;
+    margin: 5px;
+}
+
+.PetName {
+    font-size: 25px;
+}
+
+.Gender {
+    width: 20px;
+    height: 20px;
+}
+
+.type {
+    font-size: 20px;
+}
+
+.AboutContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.AboutContainer>* {
+    margin: 5px;
+    padding: 0 15px;
+}
+
+.AboutHeader {
+    font-size: 20px;
+}

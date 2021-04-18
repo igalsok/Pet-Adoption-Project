@@ -1,0 +1,9 @@
+.Home {
+    position: relative;
+    background: #F9F9F9;
+    flex-grow: 1;
+}
+
+.Home>* {
+    margin-top: 20px;
+}
