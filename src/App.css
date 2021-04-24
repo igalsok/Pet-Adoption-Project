@@ -11,6 +11,7 @@ body {
     position: relative;
     margin: 0;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
 }
 
 small {
@@ -19,4 +20,8 @@ small {
 
 .yellow-color {
     color: #FAD00D;
+}
+
+.yellow-bg {
+    background: #FAD00D;
 }

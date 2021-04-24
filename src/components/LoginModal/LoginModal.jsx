@@ -5,12 +5,12 @@ import Signup from './Signup/Signup';
 import styles from './LoginModal.module.css';
 
 function LoginModal(props) {
-	const { show } = props;
+	const { show, onHide } = props;
 	const [ displayLogin, setDisplayLogin ] = useState(true);
-	const handleSignUpClick = () => {
+	const redirectToSignup = () => {
 		setDisplayLogin(false);
 	};
-	const handleSignInClick = () => {
+	const redirectToLogin = () => {
 		setDisplayLogin(true);
 	};
 	useEffect(
@@ -24,9 +24,9 @@ function LoginModal(props) {
 			<Modal.Header className={styles.yellowColor} closeButton />
 			<Modal.Body className={styles.yellowColor}>
 				{displayLogin ? (
-					<Login onSignupClick={handleSignUpClick} />
+					<Login redirect={redirectToSignup} onSuccess={onHide} />
 				) : (
-					<Signup onSignupClick={handleSignInClick} />
+					<Signup redirect={redirectToLogin} />
 				)}
 			</Modal.Body>
 		</Modal>

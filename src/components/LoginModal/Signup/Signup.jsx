@@ -1,33 +1,77 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import styles from './Signup.module.css';
-
+import { SignupUser } from '../../../lib/User.ts';
+import Api from '../../../lib/Api';
 function Signup(props) {
-	const { onSignupClick } = props;
+	const { redirect } = props;
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ passwordConfirm, setPasswordConfirm ] = useState('');
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
 	const [ phone, setPhone ] = useState('');
-	const emailChangeHandler = (e) => {
-		setEmail(e.target.value);
+	const [ errorMessage, setErrorMessage ] = useState('');
+	const [ loading, setLoading ] = useState(false);
+	const inputChangeHandler = (e) => {
+		const { value, name } = e.target;
+		switch (name) {
+			case 'email':
+				setEmail(value);
+				break;
+			case 'password':
+				setPassword(value);
+				break;
+			case 'passwordConfirm':
+				setPasswordConfirm(value);
+				break;
+			case 'firstName':
+				setFirstName(value);
+				break;
+			case 'lastName':
+				setLastName(value);
+				break;
+			case 'phone':
+				setPhone(value);
+				break;
+			default:
+				break;
+		}
 	};
-	const passwordChangeHandler = (e) => {
-		setPassword(e.target.value);
+
+	const handleError = (err) => {
+		if (err.response) {
+			const { status, data } = err.response;
+			if (status >= 400 && status <= 500) {
+				setErrorMessage(data.message);
+			} else {
+				setErrorMessage('Server error please try again later');
+			}
+		} else {
+			setErrorMessage('Cannot connect to the server');
+		}
 	};
-	const passwordConfirmChangeHandler = (e) => {
-		setPasswordConfirm(e.target.value);
+
+	const handleSignup = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setErrorMessage('');
+		if (password !== passwordConfirm) {
+			setErrorMessage("Passwords doesn't match");
+			setLoading(false);
+			return;
+		}
+		try {
+			const api = Api.getInstance();
+			await api.registerUserWithEmailAndPassword(new SignupUser(email, password, firstName, lastName, phone));
+			setLoading(false);
+			redirect();
+		} catch (err) {
+			setLoading(false);
+			handleError(err);
+		}
 	};
-	const firstNameChangeHandler = (e) => {
-		setFirstName(e.target.value);
-	};
-	const lastNameChangeHandler = (e) => {
-		setLastName(e.target.value);
-	};
-	const phoneChangeHandler = (e) => {
-		setPhone(e.target.value);
-	};
+
 	return (
 		<div className={styles.SignupContainer}>
 			<div className={styles.header}>
@@ -35,7 +79,7 @@ function Signup(props) {
 				<small>Enter your information below</small>
 			</div>
 
-			<Form className={styles.SignupForm}>
+			<Form className={styles.SignupForm} onSubmit={handleSignup}>
 				<div>
 					<Form.Group controlId="formBasicEmail">
 						<Form.Control
@@ -43,7 +87,9 @@ function Signup(props) {
 							type="email"
 							placeholder="Enter email"
 							value={email}
-							onChange={emailChangeHandler}
+							name="email"
+							onChange={inputChangeHandler}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicPassword">
@@ -52,7 +98,9 @@ function Signup(props) {
 							type="password"
 							placeholder="Password"
 							value={password}
-							onChange={passwordChangeHandler}
+							name="password"
+							onChange={inputChangeHandler}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicPassword2">
@@ -61,7 +109,9 @@ function Signup(props) {
 							type="password"
 							placeholder="Confirm Password"
 							value={passwordConfirm}
-							onChange={passwordConfirmChangeHandler}
+							name="passwordConfirm"
+							onChange={inputChangeHandler}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicFName">
@@ -70,7 +120,9 @@ function Signup(props) {
 							type="text"
 							placeholder="First Name"
 							value={firstName}
-							onChange={firstNameChangeHandler}
+							name="firstName"
+							onChange={inputChangeHandler}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicLName">
@@ -79,7 +131,9 @@ function Signup(props) {
 							type="text"
 							placeholder="Last Name"
 							value={lastName}
-							onChange={lastNameChangeHandler}
+							name="lastName"
+							onChange={inputChangeHandler}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicPhone">
@@ -88,17 +142,24 @@ function Signup(props) {
 							type="number"
 							placeholder="Phone Number"
 							value={phone}
-							onChange={phoneChangeHandler}
+							name="phone"
+							onChange={inputChangeHandler}
+							required
 						/>
 					</Form.Group>
 				</div>
-				<Button variant="outline-dark" className={styles.SignupSubmit} type="submit">
+				<Button variant="outline-dark" className={styles.SignupSubmit} type="submit" disabled={loading}>
 					Sign Up
 				</Button>
 			</Form>
+			{errorMessage && (
+				<Alert className={styles.ErrorAlert} variant="danger">
+					{errorMessage}
+				</Alert>
+			)}
 			<div>
 				<span>Already have an account?</span>{' '}
-				<span className="text-muted" onClick={onSignupClick}>
+				<span className="text-muted" onClick={redirect}>
 					Sign In
 				</span>
 			</div>

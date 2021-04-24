@@ -12,7 +12,7 @@
 }
 
 .SignupForm>* {
-    margin: 30px;
+    margin: 20px;
 }
 
 .SignupContainer {
@@ -35,4 +35,8 @@
 
 .header div {
     font-size: 20px;
+}
+
+.ErrorAlert {
+    padding: 4px 8px;
 }

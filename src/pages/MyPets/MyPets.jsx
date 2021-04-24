@@ -7,22 +7,26 @@ import styles from './MyPets.module.css';
 
 function MyPets() {
 	const currentUser = useContext(UserContext);
-	const [ petList, setPetList ] = useState([]);
+	const [ petList, setPetList ] = useState(null);
 	useEffect(
 		() => {
 			const tempPetList = [];
-			const petsIdList = petIds[currentUser.id];
-			for (const petId of petsIdList) {
-				tempPetList.push(pets.find((pet) => pet.id === petId));
+			const petsIdList = petIds[1];
+			if (petsIdList) {
+				for (const petId of petsIdList) {
+					tempPetList.push(pets.find((pet) => pet.id === petId));
+				}
+				setPetList(tempPetList);
+			} else {
+				setPetList(null);
 			}
-			setPetList(tempPetList);
 		},
 		[ currentUser ]
 	);
 	return (
 		<div className={`${styles.MyPetsContainer}`}>
 			<div className={`${styles.MyPetsHeader} yellow-color`}>My Pets</div>
-			{currentUser ? <CardGrid pets={petList} /> : 'You currently do not own or foster any pets'}
+			{petList ? <CardGrid pets={petList} /> : 'You currently do not own or foster any pets'}
 		</div>
 	);
 }

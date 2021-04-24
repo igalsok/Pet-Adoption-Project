@@ -10,7 +10,7 @@ function WelcomeHeader(props) {
 			<img className={styles.Menu} src="/images/menu.png" alt="menu" onClick={onMenuClick} />
 			<div>
 				<span className={styles.Welcome}>Welcome, </span>
-				<small>{currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : 'Guest'}</small>
+				<small>{currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : 'Guest'}</small>
 			</div>
 		</div>
 	);

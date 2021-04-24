@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import styles from './Application.module.css';
+import { UserLoadedContext } from '../UserProvider/UserProvider';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import UserProvider from '../UserProvider/UserProvider';
 import NavBar from '../../components/NavBar/NavBar';
 import Home from '../../pages/Home/Home';
 import WelcomeHeader from '../WelcomeHeader/WelcomeHeader';
@@ -10,8 +10,10 @@ import AboutUs from '../../pages/AboutUs/AboutUs';
 import Pet from '../../pages/Pet/Pet';
 import MyPets from '../../pages/MyPets/MyPets';
 import Profile from '../../pages/Profile/Profile';
+import Logout from '../../pages/Logout/Logout';
 
 function Application() {
+	const isUserLoaded = useContext(UserLoadedContext);
 	const [ navDisplay, setNavDisplay ] = useState(false);
 	const [ modalIsOpen, setIsOpen ] = useState(false);
 	const onMenuClick = (e) => {
@@ -24,22 +26,24 @@ function Application() {
 	function handleModalClose() {
 		setIsOpen(false);
 	}
+	if (!isUserLoaded) {
+		return <div />;
+	}
 	return (
 		<div className={styles.Application}>
-			<UserProvider>
-				<Router>
-					<WelcomeHeader onMenuClick={onMenuClick} />
-					<NavBar visible={navDisplay} onClick={onMenuClick} onLoginClick={handleLoginClick} />
-					<LoginModal show={modalIsOpen} onHide={handleModalClose} />
-					<Switch>
-						<Route path="/mypets" component={MyPets} />
-						<Route path="/aboutus" component={AboutUs} />
-						<Route path="/pet/:petId" component={Pet} />
-						<Route path="/profile" component={Profile} />
-						<Route path="/" component={Home} />
-					</Switch>
-				</Router>
-			</UserProvider>
+			<Router>
+				<WelcomeHeader onMenuClick={onMenuClick} />
+				<NavBar visible={navDisplay} onClick={onMenuClick} onLoginClick={handleLoginClick} />
+				<LoginModal show={modalIsOpen} onHide={handleModalClose} />
+				<Switch>
+					<Route path="/mypets" component={MyPets} />
+					<Route path="/aboutus" component={AboutUs} />
+					<Route path="/pet/:petId" component={Pet} />
+					<Route path="/profile" component={Profile} />
+					<Route path="/logout" component={Logout} />
+					<Route path="/" component={Home} />
+				</Switch>
+			</Router>
 		</div>
 	);
 }
