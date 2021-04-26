@@ -149,6 +149,28 @@ class Api {
 		});
 		return response.data.pet;
 	};
+	public updatePetStatus = async (status: string, petId: string | undefined) => {
+		const pet = { status, petId };
+		const response = await axios.put(
+			`${this.URL}/pet/status`,
+			{ pet },
+			{
+				headers: {
+					Authorization: this.token
+				}
+			}
+		);
+		return response.data.pet;
+	};
+
+	public getMyPets = async () => {
+		const response = await axios.get(`${this.URL}/pet/my`, {
+			headers: {
+				Authorization: this.token
+			}
+		});
+		return response.data.pets;
+	};
 }
 
 export default Api;

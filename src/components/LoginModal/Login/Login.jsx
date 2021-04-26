@@ -11,6 +11,7 @@ function Login(props) {
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ errorMessage, setErrorMessage ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	const emailChangeHandler = (e) => {
 		setEmail(e.target.value);
 	};
@@ -19,6 +20,7 @@ function Login(props) {
 	};
 	const handleLogin = async (e) => {
 		e.preventDefault();
+		setLoading(true);
 		setErrorMessage('');
 		try {
 			const api = Api.getInstance();
@@ -26,12 +28,15 @@ function Login(props) {
 			const localDB = LocalDB.getInstance();
 			await localDB.setToken(response.data.token);
 			makeToast('Logged in successfully');
+			setLoading(false);
 			onSuccess();
 		} catch (err) {
 			if (err.response.status === 401) {
 				setErrorMessage("Email or password doesn't match");
+				setLoading(false);
 			} else {
 				setErrorMessage('Server Error, try again later');
+				setLoading(false);
 			}
 		}
 	};
@@ -64,7 +69,7 @@ function Login(props) {
 						/>
 					</Form.Group>
 				</div>
-				<Button variant="outline-dark" className={styles.loginSubmit} type="submit">
+				<Button variant="outline-dark" className={styles.loginSubmit} type="submit" disabled={loading}>
 					Sign In
 				</Button>
 				{errorMessage && (

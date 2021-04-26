@@ -1,24 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styles from './Pet.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 import Api from '../../lib/Api';
+import { UserContext } from '../../components/UserProvider/UserProvider';
+import { ToastContext } from '../../components/Toast/Toast';
 
 function Pet(props) {
 	const { petId } = useParams();
 	const [ pet, setPet ] = useState(null);
+	const [ isOwner, setIsOwner ] = useState(false);
+	const currentUser = useContext(UserContext);
+	const [ loading, setLoading ] = useState(false);
+	const makeToast = useContext(ToastContext);
 	useEffect(
 		() => {
 			const api = Api.getInstance();
 			const getPet = async () => {
 				try {
-					const pet = await api.getPet(petId);
-					setPet(pet);
+					const petObject = await api.getPet(petId);
+					if (petObject && currentUser) {
+						setIsOwner(petObject.userId === currentUser.id);
+					} else {
+						setIsOwner(false);
+					}
+					setPet(petObject);
 				} catch (err) {}
 			};
 			getPet();
 		},
-		[ petId ]
+		[ petId, currentUser ]
 	);
+	const handleStatusChange = async (e) => {
+		setLoading(true);
+		const { name } = e.target;
+		const api = Api.getInstance();
+		try {
+			const petObject = await api.updatePetStatus(name, pet.id);
+			if (petObject && currentUser) {
+				setIsOwner(petObject.userId === currentUser.id);
+			} else {
+				setIsOwner(false);
+			}
+			setPet(petObject);
+			makeToast(`You successfully ${name === 'Available' ? 'returned' : name} ${pet.name}`);
+		} catch (err) {
+			console.log(err);
+		}
+		setLoading(false);
+	};
 	if (!pet) {
 		return <div />;
 	}
@@ -41,7 +71,6 @@ function Pet(props) {
 						<img src={pet.type === 'Dog' ? '/images/dog.png' : '/images/cat.png'} alt="type" />
 						<span className="text-muted">{pet.breed}</span>
 					</div>
-
 					<div className={styles.SecondaryInfoWrapper}>
 						<div>
 							Height: <span className="text-muted">{pet.height}CM</span>
@@ -63,10 +92,59 @@ function Pet(props) {
 						<div className={`${styles.AboutHeader} yellow-color`}>About Pet</div>
 						<div className="text-muted">{pet.bio}</div>
 					</div>
+					<div className={styles.Buttons}>
+						{!isOwner &&
+						!pet.status && (
+							<Button
+								className={`${styles.submit} yellow-bg`}
+								variant="warning"
+								name="Fostered"
+								type="button"
+								disabled={!currentUser || loading}
+								onClick={handleStatusChange}
+							>
+								Foster
+							</Button>
+						)}
+						{((!isOwner && !pet.status) || (isOwner && pet.status === 'Fostered')) && (
+							<Button
+								className={`${styles.submit} yellow-bg`}
+								variant="warning"
+								type="button"
+								name="Adopted"
+								disabled={!currentUser || loading}
+								onClick={handleStatusChange}
+							>
+								Adopt
+							</Button>
+						)}
+					</div>
+					{isOwner && (
+						<div className={styles.Buttons}>
+							<Button
+								className={`${styles.submit} yellow-bg`}
+								variant="warning"
+								type="button"
+								name="Available"
+								disabled={!currentUser || loading}
+								onClick={handleStatusChange}
+							>
+								Return pet
+							</Button>
+						</div>
+					)}
+					{!isOwner &&
+					pet.status && (
+						<div className={styles.Buttons}>
+							<Button className={`${styles.submit} yellow-bg`} variant="warning" type="button" disabled>
+								{pet.status}
+							</Button>
+						</div>
+					)}
 				</div>
 			</div>
 		</React.Fragment>
 	);
 }
 
-export default Pet;
+export default withRouter(Pet);

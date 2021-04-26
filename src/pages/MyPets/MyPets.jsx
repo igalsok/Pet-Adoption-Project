@@ -1,28 +1,36 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../components/UserProvider/UserProvider';
 import CardGrid from '../../components/CardGrid/CardGrid';
-import petIds from './pets';
 import styles from './MyPets.module.css';
+import Api from '../../lib/Api';
 
 function MyPets() {
 	const currentUser = useContext(UserContext);
 	const [ petList, setPetList ] = useState(null);
-	const pets = null;
 	useEffect(
 		() => {
-			const tempPetList = [];
-			const petsIdList = petIds[1];
-			if (petsIdList) {
-				for (const petId of petsIdList) {
-					tempPetList.push(pets.find((pet) => pet.id === petId));
+			const getMyPets = async () => {
+				if (currentUser) {
+					const api = Api.getInstance();
+					try {
+						const pets = await api.getMyPets();
+						if (pets && pets.length > 0) {
+							setPetList(pets);
+						} else {
+							setPetList(null);
+						}
+					} catch (err) {
+						console.log(err);
+					}
 				}
-				setPetList(tempPetList);
-			} else {
-				setPetList(null);
-			}
+			};
+			getMyPets();
 		},
 		[ currentUser ]
 	);
+	if (!currentUser) {
+		return <div />;
+	}
 	return (
 		<div className={`${styles.MyPetsContainer}`}>
 			<div className={`${styles.MyPetsHeader} yellow-color`}>My Pets</div>

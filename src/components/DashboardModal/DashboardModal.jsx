@@ -32,7 +32,7 @@ function DashboardModal(props) {
 			<Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" animation={false} centered>
 				<Modal.Header className="yellow-bg" closeButton />
 				<Modal.Body className="yellow-bg">
-					<Form onSubmit={handleConfirmPassword}>
+					<Form className={styles.Form} onSubmit={handleConfirmPassword}>
 						<Form.Group controlId="formBasicPassword">
 							<Form.Label className="text-muted">Enter you password:</Form.Label>
 							<Form.Control
@@ -45,7 +45,7 @@ function DashboardModal(props) {
 								}}
 							/>
 						</Form.Group>
-						<Button variant="outline-dark" className={styles.loginSubmit} type="submit">
+						<Button variant="outline-dark" className={styles.submitPassword} type="submit">
 							Confirm Password
 						</Button>
 					</Form>

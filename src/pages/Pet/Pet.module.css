@@ -93,3 +93,16 @@ body {
 .AboutHeader {
     font-size: 24px;
 }
+
+.Buttons {
+    width: 100%;
+    display: flex;
+    margin: 10px;
+    padding: 5px 15px;
+    justify-content: space-between;
+}
+
+.Buttons>* {
+    flex-grow: 1;
+    margin: 5px;
+}
