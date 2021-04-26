@@ -34,7 +34,7 @@ export class LocalDB {
 	}
 	public async setToken(token: string) {
 		await localforage.setItem('token', token);
-		this.listenToTokenChange(this.callback);
+		this.getItem('token');
 	}
 
 	public removeItem(key: string, callback?: (err: any) => void | undefined) {

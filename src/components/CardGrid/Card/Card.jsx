@@ -12,7 +12,7 @@ function Card(props) {
 	return (
 		<div className={styles.Card} onClick={handleCardClick}>
 			<div className={styles.AvatarWrapper}>
-				<img className={styles.Avatar} src={pet.imageUrl} alt={pet.name} />
+				<img className={styles.Avatar} src={pet.picture} alt={pet.name} />
 			</div>
 			<img
 				className={styles.Gender}
@@ -21,11 +21,11 @@ function Card(props) {
 			/>
 			<div className={styles.PetDetails}>
 				<div>{pet.name}</div>
-				<small>{pet.race}</small>
+				<small>{pet.breed}</small>
 			</div>
 			<div>
 				<small>Status: </small>
-				<small className={styles.Status}>{pet.status}</small>
+				<small className={styles.Status}>{pet.status ? pet.status : 'Available'}</small>
 			</div>
 		</div>
 	);

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useContext } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
 import styles from './Login.module.css';
-import axios from 'axios';
 import { LocalDB } from '../../../lib/LocalDB';
+import Api from '../../../lib/Api';
+import { ToastContext } from '../../Toast/Toast';
 
 function Login(props) {
 	const { redirect, onSuccess } = props;
+	const makeToast = useContext(ToastContext);
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
+	const [ errorMessage, setErrorMessage ] = useState('');
 	const emailChangeHandler = (e) => {
 		setEmail(e.target.value);
 	};
@@ -16,21 +19,21 @@ function Login(props) {
 	};
 	const handleLogin = async (e) => {
 		e.preventDefault();
+		setErrorMessage('');
 		try {
-			const response = await axios({
-				method: 'post',
-				url: 'http://127.0.0.1:8080/users/login',
-				data: {
-					user: {
-						email,
-						password
-					}
-				}
-			});
+			const api = Api.getInstance();
+			const response = await api.loginWithEmailAndPassword(email, password);
 			const localDB = LocalDB.getInstance();
 			await localDB.setToken(response.data.token);
+			makeToast('Logged in successfully');
 			onSuccess();
-		} catch (err) {}
+		} catch (err) {
+			if (err.response.status === 401) {
+				setErrorMessage("Email or password doesn't match");
+			} else {
+				setErrorMessage('Server Error, try again later');
+			}
+		}
 	};
 	return (
 		<div className={styles.LoginContainer}>
@@ -64,6 +67,11 @@ function Login(props) {
 				<Button variant="outline-dark" className={styles.loginSubmit} type="submit">
 					Sign In
 				</Button>
+				{errorMessage && (
+					<Alert className={styles.ErrorAlert} variant="danger">
+						{errorMessage}
+					</Alert>
+				)}
 			</Form>
 			<div>
 				<span>Don't have an account yet?</span>{' '}

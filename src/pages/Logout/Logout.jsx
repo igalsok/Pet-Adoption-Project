@@ -14,7 +14,9 @@ function Logout() {
 			}
 			const localDB = LocalDB.getInstance();
 			localDB.removeItem('token', () => {
-				isMounted && setLoggedOut(true);
+				localDB.removeItem('adminToken', () => {
+					isMounted && setLoggedOut(true);
+				});
 			});
 			return () => {
 				isMounted = false;

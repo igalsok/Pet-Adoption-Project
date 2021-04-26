@@ -2,12 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../components/UserProvider/UserProvider';
 import CardGrid from '../../components/CardGrid/CardGrid';
 import petIds from './pets';
-import pets from '../Home/pets';
 import styles from './MyPets.module.css';
 
 function MyPets() {
 	const currentUser = useContext(UserContext);
 	const [ petList, setPetList ] = useState(null);
+	const pets = null;
 	useEffect(
 		() => {
 			const tempPetList = [];

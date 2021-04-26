@@ -9,6 +9,7 @@
 .LoginForm {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .LoginForm>* {
@@ -35,4 +36,9 @@
 
 .header div {
     font-size: 20px;
+}
+
+.ErrorAlert {
+    padding: 5px 2px;
+    text-align: center;
 }

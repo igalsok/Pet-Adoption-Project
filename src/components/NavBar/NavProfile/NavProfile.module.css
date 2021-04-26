@@ -1,5 +1,6 @@
 .ProfileContainer {
     display: flex;
+    justify-content: space-between;
 }
 
 .ProfileContainer>* {

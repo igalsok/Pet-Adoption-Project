@@ -3,6 +3,7 @@
     background: white;
     border-radius: 5px;
     padding: 5px;
+    overflow-y: auto;
 }
 
 .header {
