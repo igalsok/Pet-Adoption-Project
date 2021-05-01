@@ -11,9 +11,27 @@ body {
     position: relative;
 }
 
+.Header {
+    display: flex;
+    margin: 10px;
+    padding: 5px 15px;
+    justify-content: space-between;
+}
+
+.PhotoContainer {
+    width: 100%;
+    display: flex;
+}
+
+.Icon {
+    height: max-content;
+    display: flex;
+    margin: 10px;
+}
+
 .Photo {
     margin-top: 5px;
-    width: 100%;
+    flex-grow: 1;
     height: 200px;
     object-fit: contain;
 }
@@ -29,7 +47,7 @@ body {
     align-items: center;
 }
 
-.Header {
+.InfoHeader {
     width: 100%;
     margin: 10px;
     padding: 5px 15px;
@@ -38,7 +56,7 @@ body {
     justify-content: center;
 }
 
-.Header>* {
+.InfoHeader>* {
     margin-right: 10px;
 }
 

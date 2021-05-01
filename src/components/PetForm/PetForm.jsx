@@ -1,36 +1,31 @@
-import React, { useState, useContext } from 'react';
-import styles from './AddPet.module.css';
+import React, { useEffect, useState } from 'react';
+import styles from './PetForm.module.css';
 import TextareaAutosize from 'react-autosize-textarea';
 import { Form, Button } from 'react-bootstrap';
 import { FilePicker } from 'react-file-picker';
 import Pet from '../../lib/Pet';
-import Api from '../../lib/Api';
-import { ToastContext } from '../Toast/Toast';
+import { withRouter } from 'react-router-dom';
 
-function AddPet() {
-	const [ gender, setGender ] = useState('/images/female.png');
+function PetForm(props) {
+	const { onSubmit, pet } = props;
+	const [ gender, setGender ] = useState('female');
 	const [ name, setName ] = useState('');
 	const [ type, setType ] = useState('');
 	const [ breed, setBreed ] = useState('');
 	const [ height, setHeight ] = useState('');
 	const [ weight, setWeight ] = useState('');
-	const [ hypoallergenic, setHypoallergenic ] = useState('');
+	const [ hypoallergenic, setHypoallergenic ] = useState('-1');
 	const [ color, setColor ] = useState('');
 	const [ bio, setBio ] = useState('');
 	const [ dietary, setDietary ] = useState('');
 	const [ picture, setPicture ] = useState(null);
-	const makeToast = useContext(ToastContext);
 	const handleGenderChange = () => {
-		gender === '/images/female.png' ? setGender('/images/male.png') : setGender('/images/female.png');
+		gender === 'female' ? setGender('male') : setGender('female');
 	};
 	const changePictureHandler = (file) => {
 		file ? setPicture(file) : setPicture('');
 	};
 
-	const getGender = () => {
-		if (gender === '/images/female.png') return 'female';
-		return 'male';
-	};
 	const clearFields = () => {
 		setGender('');
 		setName('');
@@ -38,27 +33,40 @@ function AddPet() {
 		setBreed('');
 		setHeight('');
 		setWeight('');
-		setHypoallergenic('');
+		setHypoallergenic('2');
 		setColor('');
 		setBio('');
 		setDietary('');
 		setPicture(null);
 	};
 
+	useEffect(
+		() => {
+			if (pet) {
+				setGender(pet.gender);
+				setName(pet.name);
+				setType(pet.type);
+				setBreed(pet.breed);
+				setHeight(pet.height);
+				setWeight(pet.weight);
+				setHypoallergenic(pet.hypoallergenic ? '1' : '0');
+				setColor(pet.color);
+				setBio(pet.bio);
+				setDietary(pet.dietary);
+			}
+		},
+		[ pet ]
+	);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!picture) {
+		if (!picture && !pet) {
 			console.log('please enter a pet picture');
 			return;
 		}
 		const boolHypoallergenic = hypoallergenic === '1' ? true : false;
-		const newPet = new Pet(name, getGender(), type, breed, height, weight, boolHypoallergenic, color, dietary, bio);
-		const api = Api.getInstance();
-		try {
-			await api.addPet(newPet, picture);
-			makeToast('Pet Added Successfully');
-		} catch (err) {}
-		clearFields();
+		const newPet = new Pet(name, gender, type, breed, height, weight, boolHypoallergenic, color, dietary, bio);
+		onSubmit(newPet, picture, clearFields);
 	};
 	return (
 		<React.Fragment>
@@ -66,12 +74,14 @@ function AddPet() {
 				<FilePicker
 					extensions={[ 'jpg', 'bmp', 'png', 'jpeg' ]}
 					onChange={changePictureHandler}
-					onError={(errMsg) => {}}
+					onError={(errMsg) => {
+						console.log(errMsg);
+					}}
 				>
 					<div className={styles.PhotoContainer}>
 						<img
 							className={styles.Photo}
-							src={picture ? URL.createObjectURL(picture) : '/images/dog.jpg'}
+							src={picture ? URL.createObjectURL(picture) : pet ? pet.picture : '/images/dog.jpg'}
 							alt="pet"
 						/>
 						<div className={styles.ChangePicture}>Change Picture</div>
@@ -91,7 +101,12 @@ function AddPet() {
 									}}
 								/>
 							</Form.Group>
-							<img className={styles.Gender} src={gender} alt="gender" onClick={handleGenderChange} />
+							<img
+								className={styles.Gender}
+								src={gender === 'female' ? '/images/female.png' : '/images/male.png'}
+								alt="gender"
+								onClick={handleGenderChange}
+							/>
 						</div>
 						<div className={styles.SecondaryInfoWrapper}>
 							<Form.Group controlId="type">
@@ -122,6 +137,8 @@ function AddPet() {
 									required
 									placeholder="Height"
 									value={height}
+									min="1"
+									max="300"
 									onChange={(e) => {
 										setHeight(+e.target.value);
 									}}
@@ -133,6 +150,8 @@ function AddPet() {
 									required
 									placeholder="Weight"
 									value={weight}
+									min="1"
+									max="300"
 									onChange={(e) => {
 										setWeight(+e.target.value);
 									}}
@@ -153,14 +172,14 @@ function AddPet() {
 								<Form.Control
 									as="select"
 									required
-									defaultValue="hypoallergy"
+									value={hypoallergenic}
 									onChange={(e) => {
 										setHypoallergenic(e.target.value);
 									}}
 								>
-									<option value="hypoallergy">Hypoallergenic</option>
+									<option value="-1">Hypoallergenic</option>
 									<option value="1">Yes</option>
-									<option value="2">No</option>
+									<option value="0">No</option>
 								</Form.Control>
 							</Form.Group>
 						</div>
@@ -185,7 +204,7 @@ function AddPet() {
 								onChange={(e) => setBio(e.target.value)}
 							/>
 							<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
-								Add Pet
+								{pet ? 'Edit Pet' : 'Add Pet'}
 							</Button>
 						</div>
 					</div>
@@ -194,4 +213,4 @@ function AddPet() {
 		</React.Fragment>
 	);
 }
-export default AddPet;
+export default withRouter(PetForm);

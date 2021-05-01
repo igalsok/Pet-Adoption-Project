@@ -44,22 +44,42 @@ function Pet(props) {
 			}
 			setPet(petObject);
 			makeToast(`You successfully ${name === 'Available' ? 'returned' : name} ${pet.name}`);
-		} catch (err) {
-			console.log(err);
-		}
+		} catch (err) {}
 		setLoading(false);
 	};
+	const handlePetSave = async () => {
+		const api = Api.getInstance();
+		const isSaved = pet.saved;
+		setPet((prevPet) => ({ ...prevPet, saved: !prevPet.saved }));
+		try {
+			isSaved ? await api.removeSavedPet(pet.id) : await api.savePet(pet.id);
+		} catch (err) {
+			setPet((prevPet) => ({ ...prevPet, saved: !prevPet.saved }));
+		}
+	};
+	const handleBackNav = () => {
+		props.history.goBack();
+	};
+
 	if (!pet) {
 		return <div />;
 	}
 	return (
 		<React.Fragment>
 			<div className={styles.PetContainer}>
+				<div className={styles.Header}>
+					<img src="/images/back.png" alt="back" onClick={handleBackNav} />
+					<img
+						src={pet.saved ? '/images/saved.png' : '/images/save.png'}
+						alt="save"
+						onClick={handlePetSave}
+					/>
+				</div>
 				<div className={styles.PhotoContainer}>
 					<img className={styles.Photo} src={pet.picture} alt="pet" />
 				</div>
 				<div className={styles.InfoContainer}>
-					<div className={styles.Header}>
+					<div className={styles.InfoHeader}>
 						<span className={styles.PetName}>{pet.name}</span>
 						{pet.gender === 'female' ? (
 							<img className={styles.Gender} src="/images/female.png" alt="female" />

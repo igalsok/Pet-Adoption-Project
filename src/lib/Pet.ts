@@ -1,4 +1,5 @@
 class Pet {
+	public id: string | undefined;
 	public name: string;
 	public gender: string;
 	public type: string;
@@ -19,7 +20,8 @@ class Pet {
 		hypoallergenic: boolean,
 		color: string,
 		dietary: string,
-		bio: string
+		bio: string,
+		id?: string
 	) {
 		this.name = name;
 		this.gender = gender;
@@ -31,6 +33,10 @@ class Pet {
 		this.color = color;
 		this.dietary = dietary;
 		this.bio = bio;
+	}
+
+	public setId(id: string) {
+		this.id = id;
 	}
 }
 export default Pet;

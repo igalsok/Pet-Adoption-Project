@@ -8,9 +8,12 @@ import { UserProfile } from '../../lib/User';
 import { ToastContext } from '../Toast/Toast';
 import { LocalDB } from '../../lib/LocalDB';
 import { FilePicker } from 'react-file-picker';
+import { useParams } from 'react-router-dom';
 
-function ProfileForm() {
+function ProfileForm(props) {
 	const currentUser = useContext(UserContext);
+	const [ paramsUser, setParamsUser ] = useState(null);
+	const { userId } = useParams();
 	const makeToast = useContext(ToastContext);
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
@@ -19,12 +22,37 @@ function ProfileForm() {
 	const [ avatarLoading, setAvatarLoading ] = useState(false);
 	useEffect(
 		() => {
-			setFirstName(currentUser.first_name);
-			setLastName(currentUser.last_name);
-			setPhone(currentUser.phone);
-			setBio(currentUser.bio);
+			const getUserFromParams = async () => {
+				const api = Api.getInstance();
+				try {
+					const userFromApi = await api.getUserById(userId);
+					setParamsUser(userFromApi);
+				} catch (err) {
+					setParamsUser(null);
+				}
+			};
+			if (userId) {
+				getUserFromParams();
+			} else {
+				setFirstName(currentUser.first_name);
+				setLastName(currentUser.last_name);
+				setPhone(currentUser.phone);
+				setBio(currentUser.bio);
+			}
 		},
-		[ currentUser ]
+		[ currentUser, userId ]
+	);
+
+	useEffect(
+		() => {
+			if (paramsUser) {
+				setFirstName(paramsUser.first_name);
+				setLastName(paramsUser.last_name);
+				setPhone(paramsUser.phone);
+				setBio(paramsUser.bio);
+			}
+		},
+		[ paramsUser ]
 	);
 
 	const firstNameChangeHandler = (e) => {
@@ -63,22 +91,38 @@ function ProfileForm() {
 		}
 		setAvatarLoading(false);
 	};
+	if (!paramsUser && userId) {
+		return <div />;
+	}
 	return (
 		<div className={styles.ProfileContainer}>
-			<FilePicker
-				extensions={[ 'jpg', 'bmp', 'png', 'jpeg' ]}
-				onChange={changeAvatarHandler}
-				onError={(errMsg) => {}}
-			>
+			{paramsUser ? (
 				<div className={styles.AvatarContainer}>
-					{avatarLoading && <Spinner className={styles.avatarSpinner} animation="border" variant="warning" />}
-					<div className={avatarLoading ? styles.opacity : ''}>
-						<img className={styles.Photo} src={currentUser.avatar} alt="profile" />
-						<div className={styles.changePhotoLabel}>Change</div>
-					</div>
+					<img
+						className={styles.Photo}
+						src={paramsUser.avatar ? paramsUser.avatar : '/images/blankprofile.png'}
+						alt="profile"
+					/>
 				</div>
-			</FilePicker>
-			<div className={`${styles.ProfileHeader} yellow-color`}>Profile Settings</div>
+			) : (
+				<FilePicker
+					extensions={[ 'jpg', 'bmp', 'png', 'jpeg' ]}
+					onChange={changeAvatarHandler}
+					onError={(errMsg) => {}}
+					disabled={userId}
+				>
+					<div className={styles.AvatarContainer}>
+						{avatarLoading && (
+							<Spinner className={styles.avatarSpinner} animation="border" variant="warning" />
+						)}
+						<div className={avatarLoading ? styles.opacity : ''}>
+							<img className={styles.Photo} src={currentUser.avatar} alt="profile" />
+							{<div className={styles.changePhotoLabel}>Change</div>}
+						</div>
+					</div>
+				</FilePicker>
+			)}
+			<div className={`${styles.ProfileHeader} yellow-color`}>Profile {!paramsUser && 'Settings'}</div>
 			<Form className={styles.ProfileForm} onSubmit={profileSubmitHandler}>
 				<div>
 					<Form.Group controlId="formBasicFName">
@@ -89,6 +133,7 @@ function ProfileForm() {
 							placeholder="First Name"
 							value={firstName}
 							onChange={firstNameChangeHandler}
+							disabled={userId}
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicLName">
@@ -99,6 +144,7 @@ function ProfileForm() {
 							placeholder="Last Name"
 							value={lastName}
 							onChange={lastNameChangeHandler}
+							disabled={userId}
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicPhone">
@@ -109,6 +155,7 @@ function ProfileForm() {
 							placeholder="Phone Number"
 							value={phone}
 							onChange={phoneChangeHandler}
+							disabled={userId}
 						/>
 					</Form.Group>
 					<div className={styles.TextareaContainer}>
@@ -118,11 +165,14 @@ function ProfileForm() {
 							rows={3}
 							value={bio}
 							onChange={bioChangeHandler}
+							disabled={userId}
 						/>
 					</div>
-					<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
-						Save
-					</Button>
+					{!paramsUser && (
+						<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
+							Save
+						</Button>
+					)}
 				</div>
 			</Form>
 		</div>

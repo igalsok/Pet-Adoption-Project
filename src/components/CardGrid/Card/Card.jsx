@@ -6,8 +6,8 @@ function Card(props) {
 	const { pet } = props;
 	const history = useHistory();
 	const handleCardClick = () => {
-		const path = `/pet/${pet.id}`;
-		history.push(path);
+		const isFromAdminDashboard = history.location.pathname.substr(1, 5) === 'admin';
+		history.push(isFromAdminDashboard ? `pet/${pet.id}` : `/pet/${pet.id}`);
 	};
 	return (
 		<div className={styles.Card} onClick={handleCardClick}>
@@ -16,7 +16,7 @@ function Card(props) {
 			</div>
 			<img
 				className={styles.Gender}
-				src={pet.gender === 'female' ? './images/female.png' : './images/male.png'}
+				src={pet.gender === 'female' ? '/images/female.png' : '/images/male.png'}
 				alt="gender"
 			/>
 			<div className={styles.PetDetails}>

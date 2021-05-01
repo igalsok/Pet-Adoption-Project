@@ -1,0 +1,40 @@
+.Container>* {
+    margin-top: 20px;
+}
+
+.StatusContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+}
+
+.Title {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.AdvancedSearch {
+    background: white;
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.StatusGroup>* {
+    margin: 0 10px;
+}
+
+.Dimensions {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+}
+
+.Dimensions>* {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+}

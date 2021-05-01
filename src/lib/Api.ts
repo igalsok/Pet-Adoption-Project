@@ -133,15 +133,19 @@ class Api {
 			}
 		});
 	};
-	public getPets = async () => {
-		const response = await axios.get(`${this.URL}/pet`, {
-			headers: {
-				Authorization: this.token
-			}
-		});
-		return response.data.pets;
+	public getPets = async (limit: number, offset: number) => {
+		const response = await axios.get(`${this.URL}/pet?limit=${limit}&offset=${offset - 1}`);
+		return response.data;
 	};
 	public getPet = async (petId: string) => {
+		if (this.token) {
+			const response = await axios.get(`${this.URL}/pet/auth/${petId}`, {
+				headers: {
+					Authorization: this.token
+				}
+			});
+			return response.data.pet;
+		}
 		const response = await axios.get(`${this.URL}/pet/${petId}`, {
 			headers: {
 				Authorization: this.token
@@ -170,6 +174,72 @@ class Api {
 			}
 		});
 		return response.data.pets;
+	};
+	public getSavedPets = async () => {
+		const response = await axios.get(`${this.URL}/pet/saved`, {
+			headers: {
+				Authorization: this.token
+			}
+		});
+		return response.data.pets;
+	};
+	public savePet = async (petId: string) => {
+		await axios.post(
+			`${this.URL}/pet/saved`,
+			{ pet: { petId } },
+			{
+				headers: {
+					Authorization: this.token
+				}
+			}
+		);
+	};
+	public removeSavedPet = async (petId: string) => {
+		await axios.delete(`${this.URL}/pet/saved`, {
+			headers: {
+				Authorization: this.token
+			},
+			data: {
+				pet: { petId }
+			}
+		});
+	};
+	public getUsers = async (limit: number, offset: number) => {
+		const response = await axios.get(`${this.URL}/users/search?limit=${limit}&offset=${offset - 1}`, {
+			headers: {
+				Authorization: this.adminToken
+			}
+		});
+		return response.data;
+	};
+	public getUserById = async (id: string) => {
+		const response = await axios.get(`${this.URL}/users/${id}`, {
+			headers: {
+				Authorization: this.adminToken
+			}
+		});
+		return response.data.user;
+	};
+
+	public getUserPets = async (id: string) => {
+		const response = await axios.get(`${this.URL}/pet/user/${id}`, {
+			headers: {
+				Authorization: this.adminToken
+			}
+		});
+		return response.data.pets;
+	};
+
+	public updatePet = async (pet: Pet, image: File) => {
+		if (!this.adminToken) throw new Error('No admin token found');
+		const formData = new FormData();
+		formData.append('image', image);
+		formData.append('pet', JSON.stringify(pet));
+		await axios.put('http://127.0.0.1:8080/pet', formData, {
+			headers: {
+				Authorization: this.adminToken
+			}
+		});
 	};
 }
 

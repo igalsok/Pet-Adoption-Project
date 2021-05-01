@@ -10,6 +10,8 @@
     "bootstrap": "^4.6.0",
     "jwt-decode": "^3.1.2",
     "localforage": "^1.9.0",
+    "rc-checkbox": "^2.3.2",
+    "rc-pagination": "^3.1.6",
     "react": "^17.0.2",
     "react-autosize-textarea": "^7.1.0",
     "react-bootstrap": "^1.5.2",

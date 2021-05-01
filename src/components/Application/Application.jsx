@@ -12,6 +12,8 @@ import Profile from '../../pages/Profile/Profile';
 import Logout from '../../pages/Logout/Logout';
 import AdminDashboard from '../../pages/AdminDashboard/AdminDashboard';
 import Api from '../../lib/Api';
+import Favorites from '../../pages/Favorites/Favorites';
+import Search from '../../pages/Search/Search';
 
 function PrivateRoute({ children, ...rest }) {
 	return (
@@ -42,11 +44,13 @@ function Application() {
 					<PrivateRoute path="/admin">
 						<AdminDashboard />
 					</PrivateRoute>
+					<Route path="/search" component={Search} />
 					<Route path="/mypets" component={MyPets} />
 					<Route path="/aboutus" component={AboutUs} />
 					<Route path="/pet/:petId" component={Pet} />
 					<Route path="/profile" component={Profile} />
 					<Route path="/logout" component={Logout} />
+					<Route path="/favorites" component={Favorites} />
 					<Route path="/" component={Home} />
 				</Switch>
 			</Router>

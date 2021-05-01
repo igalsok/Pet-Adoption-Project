@@ -1,0 +1,34 @@
+.ListItem {
+    padding: 2px;
+}
+
+.Container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Container>* {
+    margin: 5px;
+}
+
+.ImageContainer {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.Image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.PrimaryData {
+    flex-grow: 1;
+}
