@@ -20,11 +20,11 @@ function Home(props) {
 		};
 	}, []);
 	const handleSearch = (params) => {
-		props.history.push(`/search?query=${params ? params : ''}`);
+		params ? props.history.push(`/search?name=${params}`) : props.history.push(`/search`);
 	};
 	return (
 		<div className={styles.Home}>
-			<SearchBar onSearch={handleSearch} />
+			<SearchBar onSearch={handleSearch} onAdvancedSearch={handleSearch} />
 			<CardGrid pets={pets} />
 		</div>
 	);

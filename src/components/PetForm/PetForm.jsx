@@ -140,7 +140,7 @@ function PetForm(props) {
 									min="1"
 									max="300"
 									onChange={(e) => {
-										setHeight(+e.target.value);
+										setHeight(e.target.value ? +e.target.value : '');
 									}}
 								/>
 							</Form.Group>
@@ -153,7 +153,7 @@ function PetForm(props) {
 									min="1"
 									max="300"
 									onChange={(e) => {
-										setWeight(+e.target.value);
+										setWeight(e.target.value ? +e.target.value : '');
 									}}
 								/>
 							</Form.Group>

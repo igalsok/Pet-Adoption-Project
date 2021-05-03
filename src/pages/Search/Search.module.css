@@ -1,11 +1,14 @@
-.Container>* {
-    margin-top: 20px;
+.Container {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
 }
 
 .StatusContainer {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+    padding: 10px 0;
     align-items: center;
 }
 
@@ -18,9 +21,15 @@
 .AdvancedSearch {
     background: white;
     margin: 5px;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
+    padding: 15px;
+    height: fit-content;
+    transition: transform 1s;
+    z-index: 0;
+}
+
+.DisplayAdvanced {
+    transform: translateY(-100vw);
+    height: 0;
 }
 
 .StatusGroup>* {
@@ -37,4 +46,8 @@
     display: flex;
     align-items: center;
     margin: 5px;
+}
+
+.Pagination {
+    align-self: center;
 }

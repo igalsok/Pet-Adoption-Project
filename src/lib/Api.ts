@@ -40,7 +40,7 @@ class Api {
 	public loginWithEmailAndPassword = async (email: string, password: string) => {
 		const response = await axios({
 			method: 'post',
-			url: 'http://127.0.0.1:8080/users/login',
+			url: `${this.URL}/users/login`,
 			data: {
 				user: {
 					email,
@@ -52,12 +52,12 @@ class Api {
 	};
 
 	public registerUserWithEmailAndPassword = async (user: Object) => {
-		await axios.post('http://127.0.0.1:8080/users', { user });
+		await axios.post(`${this.URL}:8080/users`, { user });
 	};
 
 	public changeEmail = async (email: string) => {
 		await axios.put(
-			'http://127.0.0.1:8080/users/email',
+			`${this.URL}/users/email`,
 			{
 				user: { email }
 			},
@@ -71,7 +71,7 @@ class Api {
 
 	public changePassword = async (oldPassword: string, password: string) => {
 		await axios.put(
-			'http://127.0.0.1:8080/users/password',
+			`${this.URL}/users/password`,
 			{
 				user: { oldPassword, password }
 			},
@@ -84,7 +84,7 @@ class Api {
 	};
 	public changeProfile = async (user: Object) => {
 		await axios.put(
-			'http://127.0.0.1:8080/users',
+			`${this.URL}/users`,
 			{
 				user
 			},
@@ -99,7 +99,7 @@ class Api {
 	public changeAvatar = async (image: File) => {
 		const formData = new FormData();
 		formData.append('avatar', image);
-		await axios.put('http://127.0.0.1:8080/users/avatar', formData, {
+		await axios.put(`${this.URL}/users/avatar`, formData, {
 			headers: {
 				Authorization: this.token
 			}
@@ -108,7 +108,7 @@ class Api {
 
 	public getAdminToken = async (password: string) => {
 		const response = await axios.post(
-			'http://127.0.0.1:8080/admin',
+			`${this.URL}/admin`,
 			{
 				user: { password }
 			},
@@ -127,7 +127,7 @@ class Api {
 		const formData = new FormData();
 		formData.append('image', image);
 		formData.append('pet', JSON.stringify(pet));
-		await axios.post('http://127.0.0.1:8080/pet', formData, {
+		await axios.post(`${this.URL}/pet`, formData, {
 			headers: {
 				Authorization: this.adminToken
 			}
@@ -240,6 +240,14 @@ class Api {
 				Authorization: this.adminToken
 			}
 		});
+	};
+
+	public searchPets = async (query: string) => {
+		const enums = {
+			LIMIT: 10
+		};
+		const response = await axios.get(`${this.URL}/pet/search?${query}&limit=${enums.LIMIT}`);
+		return response.data;
 	};
 }
 
