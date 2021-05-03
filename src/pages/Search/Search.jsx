@@ -18,7 +18,7 @@ function Search(props) {
 	const [ weight, setWeight ] = useState('');
 	const [ pets, setPets ] = useState(null);
 	const [ page, setPage ] = useState(1);
-	const [ pagesCount, setPagesCount ] = useState(10);
+	const [ pagesCount, setPagesCount ] = useState(0);
 	const params = useLocation().search;
 
 	useEffect(
@@ -118,7 +118,10 @@ function Search(props) {
 				</div>
 			</div>
 			<SearchBar onSearch={handleSearch} onAdvancedSearch={toggleAdvanced} text={name} />
-			<CardGrid pets={pets} />
+			<div className={styles.grid}>
+				<CardGrid pets={pets} />
+			</div>
+
 			<Pagination className={styles.Pagination} onChange={setPage} current={page} total={pagesCount} />
 		</div>
 	);

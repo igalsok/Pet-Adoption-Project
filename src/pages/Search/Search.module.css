@@ -2,7 +2,8 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    padding-bottom: 80px;
+    padding-bottom: 150px;
+    min-height: 100%;
 }
 
 .StatusContainer {
@@ -16,6 +17,10 @@
     display: flex;
     justify-content: center;
     font-size: 24px;
+}
+
+.grid {
+    flex-grow: 1;
 }
 
 .AdvancedSearch {
@@ -50,4 +55,5 @@
 
 .Pagination {
     align-self: center;
+    margin-top: 10px;
 }

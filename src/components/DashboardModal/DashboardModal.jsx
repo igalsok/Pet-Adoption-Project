@@ -8,13 +8,17 @@ function DashboardModal(props) {
 	const { onHide } = props;
 	const [ password, setPassword ] = useState('');
 	const [ redirectToDashboard, setRedirectToDashboard ] = useState(false);
+	const [ error, setError ] = useState('');
 	const handleConfirmPassword = async (e) => {
 		e.preventDefault();
+		setError('');
 		try {
 			const api = Api.getInstance();
 			await api.getAdminToken(password);
 			setRedirectToDashboard(true);
-		} catch (err) {}
+		} catch (err) {
+			setError("Password doesn't match");
+		}
 		setPassword('');
 	};
 	useEffect(
@@ -30,7 +34,9 @@ function DashboardModal(props) {
 		<React.Fragment>
 			{redirectToDashboard && <Redirect to="/admin" />}
 			<Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" animation={false} centered>
-				<Modal.Header className="yellow-bg" closeButton />
+				<Modal.Header className="yellow-bg" closeButton>
+					<div className="red-color">{error}</div>
+				</Modal.Header>
 				<Modal.Body className="yellow-bg">
 					<Form className={styles.Form} onSubmit={handleConfirmPassword}>
 						<Form.Group controlId="formBasicPassword">
