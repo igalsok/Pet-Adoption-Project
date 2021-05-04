@@ -42,3 +42,7 @@
     padding: 5px 2px;
     text-align: center;
 }
+
+.Redirect:hover {
+    cursor: pointer;
+}

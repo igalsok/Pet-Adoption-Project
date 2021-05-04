@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './PetForm.module.css';
 import TextareaAutosize from 'react-autosize-textarea';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { FilePicker } from 'react-file-picker';
 import Pet from '../../lib/Pet';
 import { withRouter } from 'react-router-dom';
 
 function PetForm(props) {
-	const { onSubmit, pet } = props;
+	const { onSubmit, pet, error } = props;
 	const [ gender, setGender ] = useState('female');
 	const [ name, setName ] = useState('');
 	const [ type, setType ] = useState('');
@@ -19,6 +19,8 @@ function PetForm(props) {
 	const [ bio, setBio ] = useState('');
 	const [ dietary, setDietary ] = useState('');
 	const [ picture, setPicture ] = useState(null);
+	const [ bioError, setBioError ] = useState('');
+
 	const handleGenderChange = () => {
 		gender === 'female' ? setGender('male') : setGender('female');
 	};
@@ -60,8 +62,17 @@ function PetForm(props) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setBioError('');
 		if (!picture && !pet) {
 			console.log('please enter a pet picture');
+			return;
+		}
+		if (bio.length > 250) {
+			setBioError('Bio cannot contain more than 400 characters');
+			return;
+		}
+		if (type.length > 10) {
+			setBioError('type cannot contain more than 10 characters');
 			return;
 		}
 		const boolHypoallergenic = hypoallergenic === '1' ? true : false;
@@ -203,9 +214,17 @@ function PetForm(props) {
 								value={bio}
 								onChange={(e) => setBio(e.target.value)}
 							/>
-							<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
-								{pet ? 'Edit Pet' : 'Add Pet'}
-							</Button>
+							<div className={styles.Button}>
+								<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
+									{pet ? 'Edit Pet' : 'Add Pet'}
+								</Button>
+								{(error || bioError) && (
+									<Alert variant={'danger'}>
+										{error}
+										{bioError}
+									</Alert>
+								)}
+							</div>
 						</div>
 					</div>
 				</Form>

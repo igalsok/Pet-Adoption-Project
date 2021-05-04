@@ -61,6 +61,19 @@ function Signup(props) {
 			setLoading(false);
 			return;
 		}
+		if (email.length > 25) {
+			setErrorMessage('Email must not exceed 25 characters');
+			setLoading(false);
+			return;
+		} else if (password.length > 20) {
+			setErrorMessage('Password must not exceed 25 characters');
+			setLoading(false);
+			return;
+		} else if (firstName.length > 20 || lastName.length > 20 || phone.length > 20) {
+			setErrorMessage('Fields must not exceed 20 characters');
+			setLoading(false);
+			return;
+		}
 		try {
 			const api = Api.getInstance();
 			await api.registerUserWithEmailAndPassword(new SignupUser(email, password, firstName, lastName, phone));
@@ -159,7 +172,7 @@ function Signup(props) {
 			)}
 			<div>
 				<span>Already have an account?</span>{' '}
-				<span className="text-muted" onClick={redirect}>
+				<span className={`${styles.Redirect} text-muted`} onClick={redirect}>
 					Sign In
 				</span>
 			</div>

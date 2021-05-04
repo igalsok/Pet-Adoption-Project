@@ -77,3 +77,33 @@
 .opacity {
     opacity: 0.2;
 }
+
+.Button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Button>* {
+    margin: 5px 0;
+}
+
+@media only screen and (min-width: 768px) {
+    .ProfileContainer {
+        background: white;
+    }
+    .submit {
+        width: fit-content;
+        padding: 5px 40px;
+        align-self: center;
+    }
+    .FormWrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    .Photo:hover {
+        cursor: pointer;
+        opacity: 0.7;
+    }
+}

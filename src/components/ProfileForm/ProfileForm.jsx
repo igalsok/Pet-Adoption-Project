@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import TextareaAutosize from 'react-autosize-textarea';
-import { Button, Form, Spinner } from 'react-bootstrap';
+import { Button, Form, Spinner, Alert } from 'react-bootstrap';
 import styles from './ProfileForm.module.css';
 import { UserContext } from '../UserProvider/UserProvider';
 import Api from '../../lib/Api';
@@ -20,9 +20,13 @@ function ProfileForm(props) {
 	const [ phone, setPhone ] = useState('');
 	const [ bio, setBio ] = useState('');
 	const [ avatarLoading, setAvatarLoading ] = useState(false);
+	const [ loading, setLoading ] = useState(false);
+	const [ error, setError ] = useState('');
+	const [ bioError, setBioError ] = useState('');
 	useEffect(
 		() => {
 			const getUserFromParams = async () => {
+				setLoading(true);
 				const api = Api.getInstance();
 				try {
 					const userFromApi = await api.getUserById(userId);
@@ -39,6 +43,7 @@ function ProfileForm(props) {
 				setPhone(currentUser.phone);
 				setBio(currentUser.bio);
 			}
+			setLoading(false);
 		},
 		[ currentUser, userId ]
 	);
@@ -69,14 +74,29 @@ function ProfileForm(props) {
 	};
 	const profileSubmitHandler = async (e) => {
 		e.preventDefault();
+
+		setError('');
+		setBioError('');
+		if (bio.length > 400) {
+			setBioError('Bio should not exceed 400 characters');
+			return;
+		} else if ((firstName.length > 20) | (lastName.length > 20) | (phone.length > 20)) {
+			setBioError('Fields should not exceed 20 characters');
+			return;
+		}
 		try {
+			setLoading(true);
 			const api = Api.getInstance();
 			const localDB = LocalDB.getInstance();
 			const userProfile = new UserProfile(firstName, lastName, phone, bio);
 			localDB.notifyUpdated();
 			await api.changeProfile(userProfile);
+			setLoading(false);
 			makeToast('Profile updated successfully');
-		} catch (err) {}
+		} catch (err) {
+			setLoading(false);
+			setError('Server error try again later');
+		}
 	};
 	const changeAvatarHandler = async (file) => {
 		try {
@@ -108,7 +128,9 @@ function ProfileForm(props) {
 				<FilePicker
 					extensions={[ 'jpg', 'bmp', 'png', 'jpeg' ]}
 					onChange={changeAvatarHandler}
-					onError={(errMsg) => {}}
+					onError={(errMsg) => {
+						setError('Image file cannot exceed 2MB size');
+					}}
 					disabled={userId}
 				>
 					<div className={styles.AvatarContainer}>
@@ -124,7 +146,7 @@ function ProfileForm(props) {
 			)}
 			<div className={`${styles.ProfileHeader} yellow-color`}>Profile {!paramsUser && 'Settings'}</div>
 			<Form className={styles.ProfileForm} onSubmit={profileSubmitHandler}>
-				<div>
+				<div className={styles.FormWrapper}>
 					<Form.Group controlId="formBasicFName">
 						<Form.Label className="text-muted">First name</Form.Label>
 						<Form.Control
@@ -134,6 +156,7 @@ function ProfileForm(props) {
 							value={firstName}
 							onChange={firstNameChangeHandler}
 							disabled={userId}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicLName">
@@ -145,6 +168,7 @@ function ProfileForm(props) {
 							value={lastName}
 							onChange={lastNameChangeHandler}
 							disabled={userId}
+							required
 						/>
 					</Form.Group>
 					<Form.Group controlId="formBasicPhone">
@@ -156,6 +180,7 @@ function ProfileForm(props) {
 							value={phone}
 							onChange={phoneChangeHandler}
 							disabled={userId}
+							required
 						/>
 					</Form.Group>
 					<div className={styles.TextareaContainer}>
@@ -169,9 +194,22 @@ function ProfileForm(props) {
 						/>
 					</div>
 					{!paramsUser && (
-						<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
-							Save
-						</Button>
+						<div className={styles.Button}>
+							<Button
+								className={`${styles.submit} yellow-bg`}
+								variant="warning"
+								type="submit"
+								disabled={loading}
+							>
+								Save
+							</Button>
+							{(error || bioError) && (
+								<Alert variant={'danger'}>
+									{error}
+									{bioError}
+								</Alert>
+							)}
+						</div>
 					)}
 				</div>
 			</Form>

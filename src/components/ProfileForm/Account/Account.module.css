@@ -23,6 +23,7 @@
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
+    width: 100%;
 }
 
 .ProfileContainer>* {
@@ -32,4 +33,30 @@
 .submit {
     width: 100%;
     margin-top: 16px;
+}
+
+.Button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Button>* {
+    margin: 5px 0;
+}
+
+@media only screen and (min-width: 768px) {
+    .ProfileContainer {
+        background: white;
+    }
+    .submit {
+        width: fit-content;
+        padding: 5px 40px;
+        align-self: center;
+    }
+    .FormWrapper {
+        display: flex;
+        flex-direction: column;
+    }
 }

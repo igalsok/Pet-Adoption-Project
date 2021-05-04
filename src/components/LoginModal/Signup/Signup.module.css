@@ -40,3 +40,7 @@
 .ErrorAlert {
     padding: 4px 8px;
 }
+
+.Redirect:hover {
+    cursor: pointer;
+}

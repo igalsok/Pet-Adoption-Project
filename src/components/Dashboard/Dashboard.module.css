@@ -5,6 +5,7 @@
     flex-direction: column;
     align-items: center;
     margin: 10px 0;
+    margin-bottom: 200px;
 }
 
 .Container>* {
@@ -14,4 +15,19 @@
 
 .header {
     font-size: 24px;
+}
+
+@media only screen and (min-width: 768px) {
+    .Container {
+        flex-direction: row;
+        margin-left: 10px;
+        min-height: 100vh;
+        margin-bottom: 0;
+    }
+    .Container>* {
+        width: fit-content;
+        flex-grow: 1;
+        margin: 0 10px;
+        box-shadow: 0px 0px 23px -1px rgba(0, 0, 0, 0.05);
+    }
 }

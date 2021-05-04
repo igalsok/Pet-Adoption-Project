@@ -5,7 +5,8 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    padding-bottom: 100px;
+    padding-bottom: 150px;
+    min-height: 100%;
 }
 
 .Home>* {
@@ -14,4 +15,18 @@
 
 .Pagination {
     align-self: center;
+}
+
+.Grid {
+    flex-grow: 1;
+}
+
+@media only screen and (min-width: 768px) {
+    .Home {
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-left: 20px;
+        padding-bottom: 50px;
+        overflow: hidden;
+    }
 }

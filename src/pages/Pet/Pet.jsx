@@ -68,11 +68,11 @@ function Pet(props) {
 		<React.Fragment>
 			<div className={styles.PetContainer}>
 				<div className={styles.Header}>
-					<img src="/images/back.png" alt="back" onClick={handleBackNav} />
+					<img className={styles.Back} src="/images/back.png" alt="back" onClick={handleBackNav} />
 					<img
 						src={pet.saved ? '/images/saved.png' : '/images/save.png'}
 						alt="save"
-						onClick={handlePetSave}
+						onClick={currentUser ? handlePetSave : () => {}}
 					/>
 				</div>
 				<div className={styles.PhotoContainer}>

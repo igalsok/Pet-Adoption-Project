@@ -5,8 +5,34 @@
     margin: 7px;
     background: white;
     overflow-y: auto;
+    padding-bottom: 200px;
 }
 
 .ProfileContainer>* {
     margin-bottom: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+    .ProfileContainer {
+        flex-direction: row;
+        background: transparent;
+        font-size: 14px;
+        align-items: stretch;
+        position: relative;
+        padding-bottom: 0;
+    }
+    .ProfileContainer>* {
+        padding: 50px;
+        margin: 50px;
+    }
+    .Account {
+        width: 60%;
+        background: white;
+        box-shadow: 0px 0px 23px -1px rgba(0, 0, 0, 0.05);
+    }
+    .ProfileForm {
+        background: white;
+        width: 60%;
+        box-shadow: 0px 0px 23px -1px rgba(0, 0, 0, 0.05);
+    }
 }

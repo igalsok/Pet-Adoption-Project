@@ -25,21 +25,25 @@ function PrivateRoute({ children, ...rest }) {
 	);
 }
 
-function Application() {
+function Application(props) {
 	const isUserLoaded = useContext(UserLoadedContext);
 	const [ navDisplay, setNavDisplay ] = useState(false);
+	const [ isAdminDisplay, setAdminDisplay ] = useState(false);
 	const onMenuClick = (e) => {
 		e.stopPropagation();
 		setNavDisplay((prevDisplay) => !prevDisplay);
+	};
+	const setDisplay = (isAdmin) => {
+		setAdminDisplay(isAdmin);
 	};
 	if (!isUserLoaded) {
 		return <div />;
 	}
 	return (
-		<div className={styles.Application}>
+		<div className={`${styles.Application} ${isAdminDisplay ? styles.AdminDashboard : ''}`}>
 			<Router>
 				<WelcomeHeader onMenuClick={onMenuClick} />
-				<NavBar visible={navDisplay} onClick={onMenuClick} />
+				<NavBar visible={navDisplay} onClick={onMenuClick} changeDisplay={setDisplay} />
 				<Switch>
 					<PrivateRoute path="/admin">
 						<AdminDashboard />

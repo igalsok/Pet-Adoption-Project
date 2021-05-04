@@ -4,6 +4,7 @@
     border-radius: 5px;
     padding: 5px;
     overflow-y: auto;
+    padding-bottom: 200px;
 }
 
 .header {
@@ -28,4 +29,11 @@
     width: 150px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+@media only screen and (min-width: 768px) {
+    .AboutUsContainer {
+        padding: 100px;
+        padding-bottom: 50px;
+    }
 }

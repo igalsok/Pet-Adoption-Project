@@ -33,7 +33,7 @@ function Home(props) {
 	return (
 		<div className={styles.Home}>
 			<SearchBar onSearch={handleSearch} onAdvancedSearch={handleSearch} />
-			<CardGrid pets={pets} />
+			<CardGrid className={styles.Grid} pets={pets} />
 			<Pagination className={styles.Pagination} onChange={setPage} current={page} total={totalPets} />
 		</div>
 	);

@@ -13,3 +13,9 @@
     text-align: center;
     overflow-y: auto;
 }
+
+@media only screen and (min-width: 768px) {
+    .MyPetsContainer {
+        background: transparent;
+    }
+}

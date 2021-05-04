@@ -1,3 +1,11 @@
 .Container {
     overflow-y: auto;
+    margin-bottom: 200px;
+}
+
+@media only screen and (min-width: 768px) {
+    .Container {
+        margin-bottom: 50px;
+        padding: 50px;
+    }
 }

@@ -9,16 +9,20 @@ function DashboardModal(props) {
 	const [ password, setPassword ] = useState('');
 	const [ redirectToDashboard, setRedirectToDashboard ] = useState(false);
 	const [ error, setError ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	const handleConfirmPassword = async (e) => {
 		e.preventDefault();
 		setError('');
 		try {
+			setLoading(true);
 			const api = Api.getInstance();
 			await api.getAdminToken(password);
 			setRedirectToDashboard(true);
 		} catch (err) {
+			console.log(err.response.data.message);
 			setError("Password doesn't match");
 		}
+		setLoading(false);
 		setPassword('');
 	};
 	useEffect(
@@ -51,7 +55,12 @@ function DashboardModal(props) {
 								}}
 							/>
 						</Form.Group>
-						<Button variant="outline-dark" className={styles.submitPassword} type="submit">
+						<Button
+							variant="outline-dark"
+							className={styles.submitPassword}
+							type="submit"
+							disabled={loading}
+						>
 							Confirm Password
 						</Button>
 					</Form>

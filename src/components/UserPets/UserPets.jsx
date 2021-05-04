@@ -18,11 +18,10 @@ function UserPets() {
 						if (pets && pets.length > 0) {
 							setPetList(pets);
 						} else {
-							console.log('hello');
 							setPetList(null);
 						}
 					} catch (err) {
-						console.log(err.response.data);
+						setPetList(null);
 					}
 				}
 			};

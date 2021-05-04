@@ -7,7 +7,7 @@ function NavProfile(props) {
 	return (
 		<div className={styles.ProfileContainer}>
 			<div className={styles.ProfileDetails}>
-				<div>Welcome,</div>
+				<div>Welcome,&nbsp;</div>
 				<small>{currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : 'Guest'}</small>
 			</div>
 			<img

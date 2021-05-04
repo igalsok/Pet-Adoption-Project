@@ -22,6 +22,16 @@ function Login(props) {
 		e.preventDefault();
 		setLoading(true);
 		setErrorMessage('');
+		if (email.length > 25) {
+			setErrorMessage('Email must not exceed 25 characters');
+			setLoading(false);
+			return;
+		}
+		if (password.length > 20) {
+			setErrorMessage('Password must not exceed 25 characters');
+			setLoading(false);
+			return;
+		}
 		try {
 			const api = Api.getInstance();
 			const response = await api.loginWithEmailAndPassword(email, password);
@@ -80,7 +90,7 @@ function Login(props) {
 			</Form>
 			<div>
 				<span>Don't have an account yet?</span>{' '}
-				<span className="text-muted" onClick={redirect}>
+				<span className={`${styles.Redirect} text-muted`} onClick={redirect}>
 					Sign Up
 				</span>
 			</div>

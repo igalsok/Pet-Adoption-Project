@@ -1,3 +1,10 @@
 .Dashboard {
     overflow-y: auto;
 }
+
+@media only screen and (min-width: 768px) {
+    .Dashboard {
+        padding: 10px;
+        flex-grow: 1;
+    }
+}

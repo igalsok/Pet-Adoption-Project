@@ -5,8 +5,13 @@ import styles from './Profile.module.css';
 function Profile() {
 	return (
 		<div className={styles.ProfileContainer}>
-			<ProfileForm />
-			<Account />
+			<div className={styles.ProfileForm}>
+				<ProfileForm />
+			</div>
+
+			<div className={styles.Account}>
+				<Account />
+			</div>
 		</div>
 	);
 }
