@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { config } from '../config';
 import Pet from './Pet';
 class Api {
 	private static instance: Api;
-	private readonly URL: string = 'http://127.0.0.1:8080';
+	private readonly URL: string = config.API_URL;
 	private token: string | null;
 	private adminToken: string | null;
 	private constructor() {
@@ -235,7 +236,7 @@ class Api {
 		const formData = new FormData();
 		formData.append('image', image);
 		formData.append('pet', JSON.stringify(pet));
-		await axios.put('http://127.0.0.1:8080/pet', formData, {
+		await axios.put(`${this.URL}/pet`, formData, {
 			headers: {
 				Authorization: this.adminToken
 			}

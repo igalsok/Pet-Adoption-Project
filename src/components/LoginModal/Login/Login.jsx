@@ -41,7 +41,7 @@ function Login(props) {
 			setLoading(false);
 			onSuccess();
 		} catch (err) {
-			if (err.response.status === 401) {
+			if (err.response && err.response.status === 401) {
 				setErrorMessage("Email or password doesn't match");
 				setLoading(false);
 			} else {

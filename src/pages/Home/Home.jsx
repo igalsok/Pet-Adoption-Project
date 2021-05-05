@@ -16,11 +16,15 @@ function Home(props) {
 			let isMounted = true;
 			const api = Api.getInstance();
 			const getPets = async () => {
-				const { pets, count } = await api.getPets(LIMIT, page);
-				isMounted && setPets(pets);
-				isMounted && setTotalPets(count);
+				try {
+					const { pets, count } = await api.getPets(LIMIT, page);
+					isMounted && setPets(pets);
+					isMounted && setTotalPets(count);
+				} catch (err) {}
 			};
+
 			getPets();
+
 			return () => {
 				isMounted = false;
 			};
