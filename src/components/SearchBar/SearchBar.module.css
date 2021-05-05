@@ -12,7 +12,7 @@
 }
 
 .SearchIcon {
-    opacity: 50%;
+    opacity: 0.5;
     width: 20px;
     height: 20px;
     object-fit: contain;
