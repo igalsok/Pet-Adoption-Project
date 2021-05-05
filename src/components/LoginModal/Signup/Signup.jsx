@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import styles from './Signup.module.css';
 import { SignupUser } from '../../../lib/User.ts';
 import Api from '../../../lib/Api';
+import { ToastContext } from '../../Toast/Toast';
 function Signup(props) {
 	const { redirect } = props;
 	const [ email, setEmail ] = useState('');
@@ -13,6 +14,7 @@ function Signup(props) {
 	const [ phone, setPhone ] = useState('');
 	const [ errorMessage, setErrorMessage ] = useState('');
 	const [ loading, setLoading ] = useState(false);
+	const makeToast = useContext(ToastContext);
 	const inputChangeHandler = (e) => {
 		const { value, name } = e.target;
 		switch (name) {
@@ -78,6 +80,7 @@ function Signup(props) {
 			const api = Api.getInstance();
 			await api.registerUserWithEmailAndPassword(new SignupUser(email, password, firstName, lastName, phone));
 			setLoading(false);
+			makeToast('Signed up successfully');
 			redirect();
 		} catch (err) {
 			setLoading(false);

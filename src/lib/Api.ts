@@ -53,7 +53,7 @@ class Api {
 	};
 
 	public registerUserWithEmailAndPassword = async (user: Object) => {
-		await axios.post(`${this.URL}:8080/users`, { user });
+		await axios.post(`${this.URL}/users`, { user });
 	};
 
 	public changeEmail = async (email: string) => {
