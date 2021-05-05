@@ -29,7 +29,7 @@ function PetForm(props) {
 	};
 
 	const clearFields = () => {
-		setGender('');
+		setGender('female');
 		setName('');
 		setType('');
 		setBreed('');
@@ -76,6 +76,7 @@ function PetForm(props) {
 			return;
 		}
 		const boolHypoallergenic = hypoallergenic === '1' ? true : false;
+		console.log(gender);
 		const newPet = new Pet(name, gender, type, breed, height, weight, boolHypoallergenic, color, dietary, bio);
 		onSubmit(newPet, picture, clearFields);
 	};
