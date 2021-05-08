@@ -5,10 +5,13 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { FilePicker } from 'react-file-picker';
 import Pet from '../../lib/Pet';
 import { withRouter } from 'react-router-dom';
-
+const genderEnum = {
+	MALE: 'male',
+	FEMALE: 'female'
+};
 function PetForm(props) {
 	const { onSubmit, pet, error } = props;
-	const [ gender, setGender ] = useState('female');
+	const [ gender, setGender ] = useState(genderEnum.FEMALE);
 	const [ name, setName ] = useState('');
 	const [ type, setType ] = useState('');
 	const [ breed, setBreed ] = useState('');
@@ -20,10 +23,7 @@ function PetForm(props) {
 	const [ dietary, setDietary ] = useState('');
 	const [ picture, setPicture ] = useState(null);
 	const [ formError, setFormError ] = useState('');
-	const genderEnum = {
-		MALE: 'male',
-		FEMALE: 'female'
-	};
+
 	const handleGenderChange = () => {
 		gender === genderEnum.FEMALE ? setGender(genderEnum.MALE) : setGender(genderEnum.FEMALE);
 	};
@@ -68,7 +68,7 @@ function PetForm(props) {
 		e.preventDefault();
 		setFormError('');
 		if (!picture && !pet) {
-			console.log('please enter a pet picture');
+			setFormError('please enter a pet picture');
 			return;
 		}
 		if (bio.length > 250) {
@@ -118,7 +118,13 @@ function PetForm(props) {
 							</Form.Group>
 							<img
 								className={styles.Gender}
-								src={gender === genderEnum.FEMALE ? genderEnum.FEMALE : genderEnum.MALE}
+								src={
+									gender === genderEnum.FEMALE ? (
+										`/images/${genderEnum.FEMALE}.png`
+									) : (
+										`/images/${genderEnum.MALE}.png`
+									)
+								}
 								alt="gender"
 								onClick={handleGenderChange}
 							/>
