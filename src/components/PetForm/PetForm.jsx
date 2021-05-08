@@ -35,11 +35,11 @@ function PetForm(props) {
 	const clearFields = () => {
 		setGender(genderEnum.FEMALE);
 		setName('');
-		setType('');
+		setType('-1');
 		setBreed('');
 		setHeight('');
 		setWeight('');
-		setHypoallergenic('2');
+		setHypoallergenic('-1');
 		setColor('');
 		setFormError('');
 		setDietary('');
@@ -75,8 +75,8 @@ function PetForm(props) {
 			setFormError('Bio cannot contain more than 400 characters');
 			return;
 		}
-		if (type.length > 10) {
-			setFormError('type cannot contain more than 10 characters');
+		if (type !== 'Dog' && type !== 'Cat') {
+			setFormError('Please choose type');
 			return;
 		}
 		const boolHypoallergenic = hypoallergenic === '1' ? true : false;
@@ -134,12 +134,17 @@ function PetForm(props) {
 								<Form.Control
 									type="text"
 									required
+									as="select"
 									placeholder="Type"
 									value={type}
 									onChange={(e) => {
 										setType(e.target.value);
 									}}
-								/>
+								>
+									<option value="-1">Type</option>
+									<option value="Dog">Dog</option>
+									<option value="Cat">Cat</option>
+								</Form.Control>
 							</Form.Group>
 							<Form.Group controlId="breed">
 								<Form.Control
