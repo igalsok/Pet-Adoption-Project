@@ -51,7 +51,7 @@ function EditPet() {
 	return (
 		<React.Fragment>
 			<Loading isLoading={loading} />
-			<PetForm onSubmit={handleSubmit} pet={pet} error={error} />;
+			<PetForm onSubmit={handleSubmit} pet={pet} error={error} />
 		</React.Fragment>
 	);
 }
