@@ -15,12 +15,20 @@ import Api from '../../lib/Api';
 import Favorites from '../../pages/Favorites/Favorites';
 import Search from '../../pages/Search/Search';
 
-function PrivateRoute({ children, ...rest }) {
+function PrivateAdminRoute({ children, ...rest }) {
 	return (
 		<Route
 			{...rest}
 			render={({ location }) =>
 				Api.getInstance().isAdminToken() ? children : <Redirect to={{ pathname: '/' }} />}
+		/>
+	);
+}
+function PrivateRoute({ children, ...rest }) {
+	return (
+		<Route
+			{...rest}
+			render={({ location }) => (Api.getInstance().isToken() ? children : <Redirect to={{ pathname: '/' }} />)}
 		/>
 	);
 }
@@ -45,16 +53,24 @@ function Application(props) {
 				<WelcomeHeader onMenuClick={onMenuClick} />
 				<NavBar visible={navDisplay} onClick={onMenuClick} changeDisplay={setDisplay} />
 				<Switch>
-					<PrivateRoute path="/admin">
+					<PrivateAdminRoute path="/admin">
 						<AdminDashboard />
-					</PrivateRoute>
+					</PrivateAdminRoute>
 					<Route path="/search" component={Search} />
-					<Route path="/mypets" component={MyPets} />
+					<PrivateRoute path="/mypets">
+						<MyPets />
+					</PrivateRoute>
 					<Route path="/aboutus" component={AboutUs} />
 					<Route path="/pet/:petId" component={Pet} />
-					<Route path="/profile" component={Profile} />
-					<Route path="/logout" component={Logout} />
-					<Route path="/favorites" component={Favorites} />
+					<PrivateRoute path="/profile">
+						<Profile />
+					</PrivateRoute>
+					<PrivateRoute path="/logout">
+						<Logout />
+					</PrivateRoute>
+					<PrivateRoute path="/favorites">
+						<Favorites />
+					</PrivateRoute>
 					<Route path="/" component={Home} />
 				</Switch>
 			</Router>

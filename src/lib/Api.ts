@@ -25,6 +25,9 @@ class Api {
 	public isAdminToken() {
 		return this.adminToken && true;
 	}
+	public isToken() {
+		return this.token && true;
+	}
 	public clearAdminToken() {
 		this.adminToken = null;
 	}
