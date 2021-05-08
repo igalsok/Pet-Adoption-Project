@@ -40,9 +40,9 @@ function NavBar(props) {
 			if (currentUser && history.location.pathname.substr(0, 6) !== '/admin') {
 				currentUser.isAdmin &&
 					currentNavElements.push(
-						<div key={'AdminDashboard'} className={styles.NavLink}>
+						<div key={'AdminDashboard'} className={styles.NavLink} onClick={handleDashboardClick}>
 							<img className={styles.NavElementIcon} src="/images/dashboard.png" alt="dashboard" />
-							<span onClick={handleDashboardClick}>Admin Dashboard</span>
+							<span>Admin Dashboard</span>
 						</div>
 					);
 				currentNavElements = [ ...currentNavElements, createReactElementList(loggedNavIds) ];
@@ -50,9 +50,9 @@ function NavBar(props) {
 			} else if (!currentUser) {
 				currentNavElements = [ ...currentNavElements, createReactElementList(notLoggedNavIds) ];
 				currentNavElements.push(
-					<div key={'login'} className={styles.NavLink}>
+					<div key={'login'} className={styles.NavLink} onClick={handleLoginClick}>
 						<img className={styles.NavElementIcon} src="/images/login.png" alt="login" />
-						<span onClick={handleLoginClick}>Login</span>
+						<span>Login</span>
 					</div>
 				);
 				setNavElements(() => currentNavElements);
@@ -65,10 +65,12 @@ function NavBar(props) {
 		const currentNavElements = [];
 		for (const navElement of elementsLists) {
 			currentNavElements.push(
-				<div key={navElement.id} className={styles.NavLink}>
-					<img className={styles.NavElementIcon} src={navElement.iconUrl} alt={navElement.id} />
-					<NavLink to={navElement.path}>{navElement.text}</NavLink>
-				</div>
+				<NavLink key={navElement.id} to={navElement.path}>
+					<div className={styles.NavLink}>
+						<img className={styles.NavElementIcon} src={navElement.iconUrl} alt={navElement.id} />
+						<div>{navElement.text}</div>
+					</div>
+				</NavLink>
 			);
 		}
 		return currentNavElements;
