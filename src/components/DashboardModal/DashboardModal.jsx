@@ -19,7 +19,6 @@ function DashboardModal(props) {
 			await api.getAdminToken(password);
 			setRedirectToDashboard(true);
 		} catch (err) {
-			console.log(err.response.data.message);
 			setError("Password doesn't match");
 		}
 		setLoading(false);

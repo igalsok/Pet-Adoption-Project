@@ -1,16 +1,16 @@
 import PetForm from '../../components/PetForm/PetForm';
 import Api from '../../lib/Api';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ToastContext } from '../../components/Toast/Toast';
 import { useParams } from 'react-router-dom';
-import { setLoadingContext } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 
 function EditPet() {
 	const [ pet, setPet ] = useState(null);
 	const { petId } = useParams();
 	const makeToast = useContext(ToastContext);
-	const setLoading = useContext(setLoadingContext);
 	const [ error, setError ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	useEffect(
 		() => {
 			if (!petId) return;
@@ -36,7 +36,7 @@ function EditPet() {
 		setError('');
 		const api = Api.getInstance();
 		try {
-			pet.setId(petId); //Pet class
+			pet.setId(petId); //Pet class method
 			await api.updatePet(pet, picture);
 			makeToast('Pet Edited Successfully');
 		} catch (err) {
@@ -48,6 +48,11 @@ function EditPet() {
 	if (!pet) {
 		return <div />;
 	}
-	return <PetForm onSubmit={handleSubmit} pet={pet} error={error} />;
+	return (
+		<React.Fragment>
+			<Loading isLoading={loading} />
+			<PetForm onSubmit={handleSubmit} pet={pet} error={error} />;
+		</React.Fragment>
+	);
 }
 export default EditPet;

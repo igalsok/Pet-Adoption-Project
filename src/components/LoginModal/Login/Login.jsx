@@ -45,7 +45,6 @@ function Login(props) {
 				setErrorMessage("Email or password doesn't match");
 				setLoading(false);
 			} else {
-				console.log(err.response.data);
 				setErrorMessage('Server Error, try again later');
 				setLoading(false);
 			}

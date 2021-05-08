@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styles from './Pet.module.css';
 import { useParams, withRouter } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+import { Button, Alert } from 'react-bootstrap';
 import Api from '../../lib/Api';
 import { UserContext } from '../../components/UserProvider/UserProvider';
 import { ToastContext } from '../../components/Toast/Toast';
@@ -12,6 +12,7 @@ function Pet(props) {
 	const [ isOwner, setIsOwner ] = useState(false);
 	const currentUser = useContext(UserContext);
 	const [ loading, setLoading ] = useState(false);
+	const [ error, setError ] = useState('');
 	const makeToast = useContext(ToastContext);
 	useEffect(
 		() => {
@@ -25,7 +26,9 @@ function Pet(props) {
 						setIsOwner(false);
 					}
 					setPet(petObject);
-				} catch (err) {}
+				} catch (err) {
+					setPet(null);
+				}
 			};
 			getPet();
 		},
@@ -33,6 +36,7 @@ function Pet(props) {
 	);
 	const handleStatusChange = async (e) => {
 		setLoading(true);
+		setError('');
 		const { name } = e.target;
 		const api = Api.getInstance();
 		try {
@@ -44,10 +48,13 @@ function Pet(props) {
 			}
 			setPet(petObject);
 			makeToast(`You successfully ${name === 'Available' ? 'returned' : name} ${pet.name}`);
-		} catch (err) {}
+		} catch (err) {
+			setError('Server error please try again later');
+		}
 		setLoading(false);
 	};
 	const handlePetSave = async () => {
+		setError('');
 		const api = Api.getInstance();
 		const isSaved = pet.saved;
 		setPet((prevPet) => ({ ...prevPet, saved: !prevPet.saved }));
@@ -55,6 +62,7 @@ function Pet(props) {
 			isSaved ? await api.removeSavedPet(pet.id) : await api.savePet(pet.id);
 		} catch (err) {
 			setPet((prevPet) => ({ ...prevPet, saved: !prevPet.saved }));
+			setError('Server error please try again later');
 		}
 	};
 	const handleBackNav = () => {
@@ -161,6 +169,7 @@ function Pet(props) {
 							</Button>
 						</div>
 					)}
+					{error && <Alert variant={'danger'}>{error}</Alert>}
 				</div>
 			</div>
 		</React.Fragment>

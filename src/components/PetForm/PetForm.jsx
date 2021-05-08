@@ -19,17 +19,21 @@ function PetForm(props) {
 	const [ bio, setBio ] = useState('');
 	const [ dietary, setDietary ] = useState('');
 	const [ picture, setPicture ] = useState(null);
-	const [ bioError, setBioError ] = useState('');
-
+	const [ formError, setFormError ] = useState('');
+	const genderEnum = {
+		MALE: 'male',
+		FEMALE: 'female'
+	};
 	const handleGenderChange = () => {
-		gender === 'female' ? setGender('male') : setGender('female');
+		gender === genderEnum.FEMALE ? setGender(genderEnum.MALE) : setGender(genderEnum.FEMALE);
 	};
 	const changePictureHandler = (file) => {
+		setFormError('');
 		file ? setPicture(file) : setPicture('');
 	};
 
 	const clearFields = () => {
-		setGender('female');
+		setGender(genderEnum.FEMALE);
 		setName('');
 		setType('');
 		setBreed('');
@@ -37,7 +41,7 @@ function PetForm(props) {
 		setWeight('');
 		setHypoallergenic('2');
 		setColor('');
-		setBio('');
+		setFormError('');
 		setDietary('');
 		setPicture(null);
 	};
@@ -62,21 +66,20 @@ function PetForm(props) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setBioError('');
+		setFormError('');
 		if (!picture && !pet) {
 			console.log('please enter a pet picture');
 			return;
 		}
 		if (bio.length > 250) {
-			setBioError('Bio cannot contain more than 400 characters');
+			setFormError('Bio cannot contain more than 400 characters');
 			return;
 		}
 		if (type.length > 10) {
-			setBioError('type cannot contain more than 10 characters');
+			setFormError('type cannot contain more than 10 characters');
 			return;
 		}
 		const boolHypoallergenic = hypoallergenic === '1' ? true : false;
-		console.log(gender);
 		const newPet = new Pet(name, gender, type, breed, height, weight, boolHypoallergenic, color, dietary, bio);
 		onSubmit(newPet, picture, clearFields);
 	};
@@ -87,7 +90,7 @@ function PetForm(props) {
 					extensions={[ 'jpg', 'bmp', 'png', 'jpeg' ]}
 					onChange={changePictureHandler}
 					onError={(errMsg) => {
-						console.log(errMsg);
+						setFormError('Image file must not exceed 2MB');
 					}}
 				>
 					<div className={styles.PhotoContainer}>
@@ -115,7 +118,7 @@ function PetForm(props) {
 							</Form.Group>
 							<img
 								className={styles.Gender}
-								src={gender === 'female' ? '/images/female.png' : '/images/male.png'}
+								src={gender === genderEnum.FEMALE ? genderEnum.FEMALE : genderEnum.MALE}
 								alt="gender"
 								onClick={handleGenderChange}
 							/>
@@ -219,10 +222,10 @@ function PetForm(props) {
 								<Button className={`${styles.submit} yellow-bg`} variant="warning" type="submit">
 									{pet ? 'Edit Pet' : 'Add Pet'}
 								</Button>
-								{(error || bioError) && (
+								{(error || formError) && (
 									<Alert variant={'danger'}>
 										{error}
-										{bioError}
+										{formError}
 									</Alert>
 								)}
 							</div>

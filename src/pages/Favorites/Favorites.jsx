@@ -7,34 +7,43 @@ import Api from '../../lib/Api';
 function Favorites() {
 	const currentUser = useContext(UserContext);
 	const [ petList, setPetList ] = useState(null);
+	const [ loading, setLoading ] = useState(true);
+	const [ message, setMessage ] = useState('');
 	useEffect(
 		() => {
+			let isMounted = true;
 			const getMyPets = async () => {
+				isMounted && setLoading(true);
 				if (currentUser) {
 					const api = Api.getInstance();
 					try {
 						const pets = await api.getSavedPets();
 						if (pets && pets.length > 0) {
-							setPetList(pets);
+							isMounted && setPetList(pets);
 						} else {
-							setPetList(null);
+							isMounted && setPetList(null);
+							setMessage('You currently do not have any pets in your favorites');
 						}
 					} catch (err) {
-						console.log(err);
+						isMounted && setMessage('Server error please try again later');
 					}
 				}
+				isMounted && setLoading(false);
 			};
 			getMyPets();
+			return () => {
+				isMounted = false;
+			};
 		},
 		[ currentUser ]
 	);
-	if (!currentUser) {
+	if (!currentUser || loading) {
 		return <div />;
 	}
 	return (
 		<div className={`${styles.MyPetsContainer}`}>
 			<div className={`${styles.MyPetsHeader} yellow-color`}>Favorites</div>
-			{petList ? <CardGrid pets={petList} /> : 'You currently do not have any pets in your favorites'}
+			{petList ? <CardGrid pets={petList} /> : message}
 		</div>
 	);
 }

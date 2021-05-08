@@ -38,7 +38,7 @@ function Dashboard(props) {
 				);
 			}
 		} catch (err) {
-			console.log(err);
+			setUsers(null);
 		}
 	};
 	const handlePetsPage = async (page) => {
@@ -61,7 +61,7 @@ function Dashboard(props) {
 				);
 			}
 		} catch (err) {
-			console.log(err);
+			setPets(null);
 		}
 	};
 
